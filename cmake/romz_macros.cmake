@@ -9,5 +9,10 @@
 option( ROMZ_PRODUCTION_ENABLED "Enable some performace optimization defining PRODUCTION" OFF )
 if( ROMZ_PRODUCTION_ENABLED )
     list( APPEND ROMZ_COMPILER_FLAGS -DPRODUCTION )
+else()
+    list( APPEND ROMZ_COMPILER_FLAGS -DPRODUCTION )
 endif()
+
+
+
 

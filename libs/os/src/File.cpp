@@ -11,6 +11,7 @@
 // #include <romz/os/enable_largefile.h>
 #include <romz/os/os_read.h>
 #include <romz/os/os_write.h>
+#include <limits>
 
 
 static_assert( sizeof( off_t ) == sizeof( std::int64_t ), " The type off_t must be 64 bits long" );
@@ -99,8 +100,10 @@ void File::mmap(std::uint64_t offset, std::size_t size, bool readonly, std::uint
         prot |= PROT_WRITE;
 
     const int flags = MAP_PRIVATE;
-    *buffer = static_cast<uint8_t *>( ::mmap( nullptr, size, prot, flags, m_fd, offset) );
-    if( *buffer == (void *)-1 ) {
+    assert( offset < std::numeric_limits< off_t >::max() );
+    const off_t offset_tmp = static_cast< off_t >( offset );
+    *buffer = static_cast<uint8_t *>( ::mmap( nullptr, size, prot, flags, m_fd, offset_tmp) );
+    if( *buffer == reinterpret_cast< void* >( -1 ) ) {
         *buffer = nullptr;
         exception_with_errno( "mmap failed." );
     }
@@ -131,7 +134,9 @@ void File::pread(uint64_t addr, void *buffer, size_t len)
     std::size_t total = 0;
 
     while( total < len ) {
-        const ssize_t r = ::pread(m_fd, static_cast< std::uint8_t* >( buffer ) + total, len - total, addr + total);
+        assert( addr + total < std::numeric_limits< off_t >::max() );
+        const off_t offset = static_cast< off_t >( addr + total );
+        const ssize_t r = ::pread(m_fd, static_cast< std::uint8_t* >( buffer ) + total, len - total, offset);
         if( r < 0 ) {
             exception_with_errno( "pread failed." );
         }
@@ -158,7 +163,9 @@ void File::pwrite(uint64_t addr, const void *buffer, std::size_t len)
     std::size_t total = 0;
 
     while( total < len ) {
-        const ssize_t s = ::pwrite(m_fd, buffer, len, addr + total);
+        assert( addr + total < std::numeric_limits< off_t >::max() );
+        const off_t offset = static_cast< off_t >( addr + total );
+        const ssize_t s = ::pwrite(m_fd, buffer, len, offset);
         if( s < 0 ) {
             exception_with_errno( "pwrite failed." );
         }
@@ -189,7 +196,9 @@ void File::write(const void *buffer, size_t len)
 ///
 void File::seek(uint64_t offset, int whence) const
 {
-    if( ::lseek(m_fd, offset, whence) < 0 ) {
+    assert( offset < std::numeric_limits< off_t >::max() );
+    off_t offset_tmp = static_cast< off_t >( offset );
+    if( ::lseek(m_fd, offset_tmp, whence) < 0 ) {
         exception_with_errno( "lseek failed." );
     }
 }
@@ -197,13 +206,14 @@ void File::seek(uint64_t offset, int whence) const
 ///
 /// Tell the position in a file
 ///
-uint64_t File::tell() const
+std::uint64_t File::tell() const
 {
-    uint64_t offset = ::lseek( m_fd, 0, SEEK_CUR );
-    if (offset == (uint64_t) - 1) {
+    off_t offset = ::lseek( m_fd, 0, SEEK_CUR );
+    if (offset == static_cast< off_t >( -1 ) ) {
         exception_with_errno( "lseek failed." );
     }
-    return offset;
+    assert( offset >= 0 );
+    return static_cast< std::uint64_t >( offset );
 }
 
 ///
@@ -221,7 +231,9 @@ uint64_t File::file_size() const
 ///
 void File::truncate(uint64_t newsize)
 {
-    if( ::ftruncate( m_fd, newsize ) ) {
+    assert( newsize < std::numeric_limits< off_t >::max() );
+    const off_t length = static_cast< off_t >( newsize );
+    if( ::ftruncate( m_fd, length ) ) {
         exception_with_errno( "ftruncate failed." );
     }
 }
