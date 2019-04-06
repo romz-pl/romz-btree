@@ -1,0 +1,8 @@
+build/*
+
+
+3rdparty/googletest/gtest-all.o
+3rdparty/googletest/gtest.a
+
+CMakeLists.txt.user
+
