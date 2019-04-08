@@ -1,4 +1,7 @@
+add_subdirectory( config )
 add_subdirectory( container )
+
+add_subdirectory( device )
 
 add_subdirectory( error )
 

@@ -29,7 +29,7 @@ public:
     File &operator=(File &&other);
 
 
-    void create(const char *filename, std::uint32_t mode);
+    void create(const char *filename, int mode);
     void open(const char *filename, bool read_only);
     void close();
     bool is_open() const;

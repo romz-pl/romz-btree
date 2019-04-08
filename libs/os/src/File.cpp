@@ -241,7 +241,7 @@ void File::truncate(uint64_t newsize)
 ///
 /// Creates a new file
 ///
-void File::create(const char *filename, uint32_t mode)
+void File::create(const char *filename, int mode)
 {
     int osflags = O_CREAT | O_RDWR | O_TRUNC;
 #if HAVE_O_NOATIME
