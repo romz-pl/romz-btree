@@ -2,6 +2,7 @@ set( LIB_NAME romz-page )
 
 add_library( ${LIB_NAME} STATIC
     Page.cpp
+    PersistedData.cpp
     PPageData.cpp
     PPageHeader.cpp
 )
@@ -18,7 +19,9 @@ target_link_libraries(
     ${LIB_NAME}
     PUBLIC
     romz-container
+    romz-device
     romz-memory
+    romz-murmur
     PRIVATE
     # here add private libraries
 )

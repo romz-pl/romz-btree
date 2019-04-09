@@ -1,11 +1,13 @@
 add_subdirectory( config )
 add_subdirectory( container )
 
+add_subdirectory( db )
 add_subdirectory( device )
 
 add_subdirectory( error )
 
 add_subdirectory( memory )
+add_subdirectory( murmur )
 
 add_subdirectory( page )
 

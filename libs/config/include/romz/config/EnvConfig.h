@@ -25,6 +25,14 @@ struct EnvConfig
     ///
     bool disable_mmap;
 
+    ///
+    /// Creates an In-Memory Environment.
+    /// No file will be created, and the Database contents are lost after the Environment is closed.
+    /// The filename parameter can be NULL.
+    /// Do NOT specify a cache_size other than 0.
+    ///
+    bool in_memory;
+
 
     // the file mode
     int file_mode;

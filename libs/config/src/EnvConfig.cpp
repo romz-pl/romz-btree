@@ -15,6 +15,8 @@ namespace romz {
 
 EnvConfig::EnvConfig()
     : read_only( false )
+    , disable_mmap( false )
+    , in_memory( false )
     , file_mode(0644)
     , max_databases(0)
     , page_size_bytes(UPS_DEFAULT_PAGE_SIZE)

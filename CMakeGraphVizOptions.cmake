@@ -25,7 +25,7 @@ SET(GRAPHVIZ_EXTERNAL_LIBS FALSE)
 #
 # Set this to FALSE to exclude executables from the generated graphs.
 #
-SET(GRAPHVIZ_EXECUTABLES TRUE)
+SET(GRAPHVIZ_EXECUTABLES FALSE)
 
 
 #

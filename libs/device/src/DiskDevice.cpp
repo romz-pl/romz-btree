@@ -1,6 +1,8 @@
 #include <romz/device/DiskDevice.h>
 #include <romz/page/Page.h>
+#include <romz/memory/Memory.h>
 #include <cassert>
+#include <stdexcept>
 
 namespace romz {
 

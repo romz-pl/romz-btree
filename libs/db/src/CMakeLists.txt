@@ -1,12 +1,7 @@
-set( LIB_NAME romz-container )
+set( LIB_NAME romz-db )
 
 add_library( ${LIB_NAME} STATIC
-    ArrayView.cpp
-    ByteArrayView.cpp
-    ByteArray.cpp
-    DynamicArray.cpp
-    IntrusiveList.cpp
-    IntrusiveListNode.cpp
+    Db.cpp
 )
 
 target_compile_options( ${LIB_NAME} PRIVATE ${ROMZ_COMPILER_FLAGS} )
@@ -20,7 +15,8 @@ target_include_directories(
 target_link_libraries(
     ${LIB_NAME}
     PUBLIC
-    romz-memory
+    romz-config
+    romz-container
     PRIVATE
     # here add private libraries
 )

@@ -1,68 +1,27 @@
 #pragma once
 
-#include <romz/memory/Memory.h>
 #include <romz/page/PPageData.h>
+#include <romz/page/PersistedData.h>
 #include <romz/container/IntrusiveList.h>
 #include <romz/container/IntrusiveListNode.h>
 
 namespace romz {
 
-class Spinlock
-{
 
-};
 
 struct Device;
 struct BtreeCursor;
 struct BtreeNodeProxy;
 struct LocalDb;
 
-class Page {
+class Page
+{
 public:
-    // A wrapper around the persisted page data
-    struct PersistedData {
-        PersistedData()
-            : address(0), size(0), is_dirty(false), is_allocated(false),
-              is_without_header(false), raw_data(nullptr) {
-        }
 
-        PersistedData(const PersistedData &other)
-            : address(other.address), size(other.size), is_dirty(other.is_dirty),
-              is_allocated(other.is_allocated),
-              is_without_header(other.is_without_header), raw_data(other.raw_data) {
-        }
 
-        ~PersistedData() {
-#ifdef NDEBUG
-            mutex.safe_unlock();
-#endif
-            if (is_allocated)
-                Memory::release(raw_data);
-            raw_data = nullptr;
-        }
+    constexpr static uint32_t page_size_bytes = 4096;
 
-        // The spinlock is locked if the page is in use or written to disk
-        Spinlock mutex;
-
-        // address of this page - the absolute offset in the file
-        uint64_t address;
-
-        // the size of this page
-        uint32_t size;
-
-        // is this page dirty and needs to be flushed to disk?
-        bool is_dirty;
-
-        // Page buffer was allocated with malloc() (if not then it was mapped
-        // with mmap)
-        bool is_allocated;
-
-        // True if page has no persistent header
-        bool is_without_header;
-
-        // the persistent data of this page
-        PPageData *raw_data;
-    };
+    constexpr static bool enable_crc32 = false;
 
     // Misc. enums
     enum {
