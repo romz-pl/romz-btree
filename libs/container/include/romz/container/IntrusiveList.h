@@ -1,6 +1,7 @@
 #pragma once
 
 #include <cstdint>
+#include <cassert>
 
 namespace romz {
 
@@ -27,8 +28,8 @@ struct IntrusiveList {
     }
 
     void put(T *t) {
-        t->list_node.previous[I] = 0;
-        t->list_node.next[I] = 0;
+        t->list_node.previous[I] = nullptr;
+        t->list_node.next[I] = nullptr;
         if (head_) {
             t->list_node.next[I] = head_;
             head_->list_node.previous[I] = t;
@@ -65,7 +66,7 @@ struct IntrusiveList {
         if (t == head_) {
             T *next = head_->list_node.next[I];
             if (next)
-                next->list_node.previous[I] = 0;
+                next->list_node.previous[I] = nullptr;
             head_ = next;
         }
         else {
@@ -76,20 +77,20 @@ struct IntrusiveList {
             if (next)
                 next->list_node.previous[I] = prev;
         }
-        t->list_node.next[I] = 0;
-        t->list_node.previous[I] = 0;
+        t->list_node.next[I] = nullptr;
+        t->list_node.previous[I] = nullptr;
         size_--;
     }
 
     bool has(const T *t) const {
-        return t->list_node.previous[I] != 0
-                || t->list_node.next[I] != 0
+        return t->list_node.previous[I] != nullptr
+                || t->list_node.next[I] != nullptr
                 || t == head_;
     }
 
     void clear() {
-        head_ = 0;
-        tail_ = 0;
+        head_ = nullptr;
+        tail_ = nullptr;
         size_ = 0;
     }
 

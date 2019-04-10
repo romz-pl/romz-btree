@@ -78,7 +78,7 @@ Page::free_buffer()
 {
     if (node_proxy_) {
         delete node_proxy_;
-        node_proxy_ = 0;
+        node_proxy_ = nullptr;
     }
 }
 

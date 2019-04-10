@@ -5,6 +5,10 @@
 
 class Spinlock
 {
+public:
+    bool try_lock() { return true; }
+    void unlock() { }
+
 
 };
 
