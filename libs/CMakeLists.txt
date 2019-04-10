@@ -3,6 +3,7 @@ add_subdirectory( btree )
 add_subdirectory( cache )
 add_subdirectory( config )
 add_subdirectory( container )
+add_subdirectory( cursor )
 
 add_subdirectory( db )
 add_subdirectory( device )
