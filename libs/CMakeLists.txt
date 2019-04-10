@@ -1,3 +1,5 @@
+add_subdirectory( btree )
+
 add_subdirectory( cache )
 add_subdirectory( config )
 add_subdirectory( container )
