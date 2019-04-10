@@ -2,6 +2,8 @@ set( LIB_NAME romz-btree )
 
 add_library( ${LIB_NAME} STATIC
     BtreeKey.cpp
+    BtreeCursor.cpp
+    BtreeCursorState.cpp
     BtreeRecord.cpp
     PBtreeNode.cpp
 )
