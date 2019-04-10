@@ -21,7 +21,6 @@ target_link_libraries(
     PUBLIC
     romz-container
     romz-device
-    romz-memory
     romz-murmur
     PRIVATE
     # here add private libraries
