@@ -2,6 +2,7 @@ set( LIB_NAME romz-page )
 
 add_library( ${LIB_NAME} STATIC
     Page.cpp
+    PageCollection.cpp
     PersistedData.cpp
     PPageData.cpp
     PPageHeader.cpp
