@@ -11,6 +11,7 @@ add_subdirectory( memory )
 add_subdirectory( murmur )
 
 add_subdirectory( page )
+add_subdirectory( page_manager )
 
 add_subdirectory( os )
 
