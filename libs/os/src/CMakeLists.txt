@@ -1,12 +1,7 @@
 set( LIB_NAME romz-os )
 
 add_library( ${LIB_NAME} STATIC
-    enable_largefile.cpp
-    exception_with_errno.cpp
     File.cpp
-    lock_exclusive.cpp
-    os_read.cpp
-    os_write.cpp
 )
 
 target_compile_options( ${LIB_NAME} PRIVATE ${ROMZ_COMPILER_FLAGS} )

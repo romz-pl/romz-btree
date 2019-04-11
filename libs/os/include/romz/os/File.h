@@ -2,6 +2,7 @@
 
 #include <cstdio>
 #include <cstdint>
+#include <string>
 
 namespace romz {
 
@@ -11,53 +12,45 @@ namespace romz {
 ///
 class File
 {
-private:
-    constexpr static int UPS_INVALID_FD = -1;
-
 public:
-    enum {
-        kSeekSet = SEEK_SET,
-        kSeekEnd = SEEK_END,
-        kSeekCur = SEEK_CUR,
-        // kMaxPath = PATH_MAX
-    };
-
-
-    File();
-    File(File &&other);
+    File( const std::string& path );
+    File( const std::string& path, bool read_only );
     ~File();
-    File &operator=(File &&other);
+
+    File( const File &other ) = delete;
+    File( File &&other ) = delete;
+
+    File &operator=( const File &other ) = delete;
+    File &operator=( File &&other ) = delete;
+
+    void pread( void *buf, std::uint64_t count, std::uint64_t offset );
+    void pwrite( const void *buf, std::uint64_t count, std::uint64_t offset );
+
+    void read( void *buf, uint64_t count );
+    void write( const void *buffer, uint64_t len );
 
 
-    void create(const char *filename, int mode);
-    void open(const char *filename, bool read_only);
-    void close();
-    bool is_open() const;
-
-    void flush();
-
-    void set_posix_advice(int parameter);
-
-    void mmap(uint64_t offset, std::size_t size, bool readonly, std::uint8_t **buffer);
-    void munmap(void *buffer, std::size_t size);
-
-    void pread(std::uint64_t addr, void *buffer, std::size_t len);
-    void pwrite(std::uint64_t addr, const void *buffer, std::size_t len);
-
-    void write(const void *buffer, size_t len);
+    static std::size_t page_size();
 
 
-    static std::size_t granularity();
-
-
-    void seek(std::uint64_t offset, int whence) const;
+    void lseek( std::uint64_t offset ) const;
     std::uint64_t tell() const;
 
+
+    void fsync() const;
+    void fdatasync() const;
+
     std::uint64_t file_size() const;
-    void truncate(std::uint64_t newsize);
+    void truncate( std::uint64_t length ) const;
 
 private:
+    void lock_exclusive() const;
+    void set_posix_advice() const;
 
+    [[ noreturn ]] static void exception_with_errno( const std::string& txt );
+
+
+private:
     // The file handle
     int m_fd;
 
