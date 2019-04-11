@@ -1,11 +1,11 @@
 set( LIB_NAME romz-device )
 
 add_library( ${LIB_NAME} STATIC
-    Device.cpp
-    DeviceFactory.cpp
+#    Device.cpp
+#    DeviceFactory.cpp
     DiskDevice.cpp
-    DiskState.cpp
-    InMemoryDevice.cpp
+    #DiskState.cpp
+#    InMemoryDevice.cpp
 )
 
 target_compile_options( ${LIB_NAME} PRIVATE ${ROMZ_COMPILER_FLAGS} )

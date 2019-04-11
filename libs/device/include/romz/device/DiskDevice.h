@@ -1,17 +1,13 @@
 #pragma once
 
 #include <romz/device/Device.h>
-#include <romz/device/DiskState.h>
 #include <romz/os/File.h>
 
-// Tylko dla Spinlok - usunac
-#include <romz/page/Page.h>
+
 
 namespace romz {
 
-
-
-
+class Page;
 
 ///
 /// Device-implementation for disk-based files. Exception safety is "strong"
@@ -20,53 +16,46 @@ namespace romz {
 ///
 /// a File-based device
 ///
-class DiskDevice : public Device {
-
+class DiskDevice
+{
+    constexpr static uint64_t file_size_limit_bytes = 1024 * 1024 * 1024;
 
 public:
-    DiskDevice(const EnvConfig &config_);
+    DiskDevice( const std::string& path );
+    DiskDevice( const std::string& path, bool read_only );
 
-    void create() override;
-    void open() override;
-    bool is_open() override;
+    void fsync();
 
-    void close() override;
+    void truncate(uint64_t new_file_size);
 
-    void flush() override;
+    uint64_t file_size();
 
-    void truncate(uint64_t new_file_size) override;
+    void lseek(uint64_t offset) ;
 
-    uint64_t file_size() override;
+    uint64_t tell();
 
-    void seek(uint64_t offset, int whence) override;
+    void read(uint64_t offset, void *buffer, size_t len) ;
 
-    uint64_t tell() override;
+    void write(uint64_t offset, void *buffer, size_t len) ;
 
-    void read(uint64_t offset, void *buffer, size_t len) override;
+    uint64_t alloc(size_t requested_length) ;
 
-    void write(uint64_t offset, void *buffer, size_t len) override;
+    void read_page(Page *page, uint64_t address);
 
-    uint64_t alloc(size_t requested_length) override;
+    void alloc_page(Page *page);
 
-    void read_page(Page *page, uint64_t address) override;
+    void free_page(Page *page);
 
-    void alloc_page(Page *page) override;
-
-    void free_page(Page *page) override;
-
-    bool is_mapped(uint64_t file_offset, size_t size) const override;
-
-    void reclaim_space() override;
-
-    uint8_t *mapped_pointer(uint64_t address) const;
+    void reclaim_space();
 
 private:
     void truncate_nolock(uint64_t new_file_size);
 
 private:
-    // For synchronizing access
-    Spinlock m_mutex;
+    // the database file
+    File file;
 
-    DiskState m_state;
+    // excess storage at the end of the file
+    std::uint64_t excess_at_end;
 };
 }
